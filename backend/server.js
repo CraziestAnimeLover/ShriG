@@ -15,9 +15,24 @@ const port = process.env.PORT || 4000;
 // middlewares
 app.use(express.json())
 // server.js
+// ✅ CORS setup for Vercel frontend
+const allowedOrigins = [
+  "https://shri-778epsz1b-craziestanimelovers-projects.vercel.app",
+  "http://localhost:3000" // optional, for local frontend testing
+];
+
 app.use(cors({
-    origin: process.env.FRONTEND_URL,
-    credentials: true
+  origin: function(origin, callback){
+    // allow requests with no origin like mobile apps or curl
+    if(!origin) return callback(null, true);
+    if(allowedOrigins.indexOf(origin) === -1){
+      const msg = 'The CORS policy for this site does not allow access from the specified Origin.';
+      return callback(new Error(msg), false);
+    }
+    return callback(null, true);
+  },
+  methods: ["GET","POST","PUT","DELETE","OPTIONS"],
+  credentials: true
 }));
 
 
