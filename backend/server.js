@@ -18,6 +18,7 @@ app.use(express.json());
 const allowedOrigins = [
   'https://shri-778epsz1b-craziestanimelovers-projects.vercel.app',
   'https://shri-g-seven.vercel.app',
+  'https://shri-g-admin.vercel.app',
 ];
 
 app.use(cors({
