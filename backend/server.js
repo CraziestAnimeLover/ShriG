@@ -15,12 +15,22 @@ const port = process.env.PORT || 4000;
 app.use(express.json());
 
 // ⚡ CORS for your frontend
-app.use(
-  cors({
-    origin: "https://shri-778epsz1b-craziestanimelovers-projects.vercel.app", // frontend domain
-    credentials: true,
-  })
-);
+const allowedOrigins = [
+  'https://shri-778epsz1b-craziestanimelovers-projects.vercel.app',
+  'https://shri-g-seven.vercel.app',
+];
+
+app.use(cors({
+  origin: function(origin, callback) {
+    if (!origin) return callback(null, true); // allow non-browser requests
+    if (allowedOrigins.indexOf(origin) !== -1) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
+  credentials: true
+}));
 
 // DB connection
 connectDB();
