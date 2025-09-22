@@ -1,6 +1,7 @@
 import React from 'react'
 import './Footer.css'
 import { assets } from '../../assets/assets'
+import { FaInstagram } from "react-icons/fa";
 
 const Footer = () => {
   return (
@@ -33,7 +34,7 @@ const Footer = () => {
         </div>
       </div>
       <hr />
-      <p className="footer-copyright">Copyright 2024 © Tomato.com - All Right Reserved.</p>
+      <p className="footer-copyright">Copyright 2024 © SHRIGBIKANER.com - All Right Reserved.</p>
     </div>
   )
 }
