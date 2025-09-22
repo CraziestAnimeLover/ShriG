@@ -18,16 +18,14 @@ app.use(express.json())
 // ✅ CORS setup for Vercel frontend
 const allowedOrigins = [
   "https://shri-778epsz1b-craziestanimelovers-projects.vercel.app",
-  "http://localhost:3000" // optional, for local frontend testing
+  "http://localhost:3000"
 ];
 
 app.use(cors({
   origin: function(origin, callback){
-    // allow requests with no origin like mobile apps or curl
-    if(!origin) return callback(null, true);
+    if(!origin) return callback(null, true); // allow non-browser requests
     if(allowedOrigins.indexOf(origin) === -1){
-      const msg = 'The CORS policy for this site does not allow access from the specified Origin.';
-      return callback(new Error(msg), false);
+      return callback(new Error("Not allowed by CORS"), false);
     }
     return callback(null, true);
   },
