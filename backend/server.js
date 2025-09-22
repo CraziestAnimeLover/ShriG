@@ -14,10 +14,12 @@ const port = process.env.PORT || 4000;
 
 // middlewares
 app.use(express.json())
+// server.js
 app.use(cors({
-    origin: "https://shri-g-git-main-craziestanimelovers-projects.vercel.app/",
-    credentials: true, // if you are sending cookies/auth headers
+    origin: process.env.FRONTEND_URL,
+    credentials: true
 }));
+
 
 // db connection
 connectDB()
