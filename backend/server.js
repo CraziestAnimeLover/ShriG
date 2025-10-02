@@ -1,40 +1,42 @@
 import express from "express";
-import cors from "cors";
 import "dotenv/config";
 import { connectDB } from "./config/db.js";
+import cors from "cors";
+
+// Routes
 import userRouter from "./routes/userRoute.js";
 import foodRouter from "./routes/foodRoute.js";
 import cartRouter from "./routes/cartRoute.js";
 import orderRouter from "./routes/orderRoute.js";
 
 const app = express();
-const port = process.env.PORT || 4000;
+const PORT = process.env.PORT || 4000;
 
 // Allowed origins
 const allowedOrigins = [
-  'http://localhost:5173',
-  'https://shri-778epsz1b-craziestanimelovers-projects.vercel.app',
-  'https://shri-g-seven.vercel.app',
-  'https://shri-g-admin.vercel.app',
-  'https://shri-oj1zmkrt8-craziestanimelovers-projects.vercel.app', // <- add new frontend
+  "http://localhost:5174", // changed from 5173 to 5174
+  "https://shri-778epsz1b-craziestanimelovers-projects.vercel.app",
+  "https://shri-g-seven.vercel.app",
+  "https://shri-g-admin.vercel.app",
+  "https://shri-oj1zmkrt8-craziestanimelovers-projects.vercel.app",
 ];
 
-// Middlewares
-app.use(express.json());
+app.use(
+  cors({
+    origin: function (origin, callback) {
+      if (!origin) return callback(null, true); // allow Postman or server requests
+      if (allowedOrigins.includes(origin)) {
+        callback(null, true);
+      } else {
+        callback(new Error("Not allowed by CORS"));
+      }
+    },
+    credentials: true,
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization"],
+  })
+);
 
-// Global CORS handler
-app.use((req, res, next) => {
-  const origin = req.headers.origin;
-  if (allowedOrigins.includes(origin)) {
-    res.setHeader("Access-Control-Allow-Origin", origin);
-  }
-  res.setHeader("Access-Control-Allow-Methods", "GET,POST,PUT,DELETE,OPTIONS");
-  res.setHeader("Access-Control-Allow-Headers", "Content-Type,Authorization,token");
-  res.setHeader("Access-Control-Allow-Credentials", "true");
-
-  if (req.method === "OPTIONS") return res.sendStatus(200); // preflight
-  next();
-});
 
 // DB connection
 connectDB();
@@ -45,10 +47,15 @@ app.use("/api/food", foodRouter);
 app.use("/api/cart", cartRouter);
 app.use("/api/order", orderRouter);
 
-// Serve images
+// Serve uploads folder
 app.use("/images", express.static("uploads"));
 
 // Root
-app.get("/", (req, res) => res.send("API Working"));
+app.get("/", (req, res) => {
+  res.send("API is running ✅");
+});
 
-app.listen(port, () => console.log(`Server started on port ${port}`));
+// Listen
+app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+
+export default app; // For Vercel serverless
