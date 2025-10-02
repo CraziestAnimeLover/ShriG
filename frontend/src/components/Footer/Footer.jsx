@@ -8,7 +8,12 @@ const Footer = () => {
     <div className='footer' id='footer'>
       <div className="footer-content">
         <div className="footer-content-left">
+<<<<<<< HEAD
+            {/* <img src={assets.ShriG} alt="" /> */}
+            <h1>Shri_G_Bikaner</h1>
+=======
             <h1>SHRI_G_BIKANER</h1>
+>>>>>>> 29f89c05b11d8a4801082d1080c0bcab887da040
             <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.</p>
             <div className="footer-social-icons">
                 <img src={assets.facebook_icon} alt="" />
@@ -28,7 +33,7 @@ const Footer = () => {
         <div className="footer-content-right">
             <h2>GET IN TOUCH</h2>
             <ul>
-                <li>+9015088766</li>
+                <li>+7428027803</li>
                 <li>shrigbikanersweetshop@gmail.com</li>
             </ul>
         </div>
