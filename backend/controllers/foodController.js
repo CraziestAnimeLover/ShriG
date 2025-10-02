@@ -17,7 +17,7 @@ export const listFood = async (req, res) => {
     const foods = await foodModel.find({});
     res.json({ success: true, data: foods });
   } catch (error) {
-    console.error(error);
+    console.error("Error fetching food list:", error);
     res.status(500).json({ success: false, message: "Error fetching foods" });
   }
 };
