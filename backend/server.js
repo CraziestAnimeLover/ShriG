@@ -3,21 +3,18 @@ import cors from 'cors'
 import { connectDB } from "./config/db.js"
 import userRouter from "./routes/userRoute.js"
 import foodRouter from "./routes/foodRoute.js"
-import 'dotenv/config'
+import dotenv from 'dotenv/config'
 import cartRouter from "./routes/cartRoute.js"
 import orderRouter from "./routes/orderRoute.js"
 
 // app config
 const app = express()
 const port = process.env.PORT || 4000;
-
-
 // middlewares
 app.use(express.json())
 app.use(cors())
 
-// db connection
-connectDB()
+
 
 // api endpoints
 app.use("/api/user", userRouter)
@@ -26,8 +23,19 @@ app.use("/images",express.static('uploads'))
 app.use("/api/cart", cartRouter)
 app.use("/api/order",orderRouter)
 
-app.get("/", (req, res) => {
-    res.send("API Working")
+app.get("/test", (req, res) => {
+    res.send("API Working in test route ")
   });
 
-app.listen(port, () => console.log(`Server started on http://localhost:${port}`))
+// app.listen(port, () => console.log(`Server started on http://localhost:${port}`))
+
+// db connection
+connectDB().then(()=>{
+  console.log("db is connected")
+  
+  app.listen(port, () => console.log(`Server started on http://localhost:${port}`))
+})
+.catch((e)=>{
+  console.error("db conection is not connected")
+  console.log("error",e)
+})

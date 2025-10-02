@@ -1,11 +1,14 @@
 import mongoose from "mongoose";
+import dotenv from "dotenv";
 
-export const  connectDB = async () =>{
+dotenv.config();
 
-    await mongoose.connect('mongodb+srv://riyarsunny706:rmIHrVRGcTvXBsvV@shrigbikaner.gs4slf2.mongodb.net/food-del').then(()=>console.log("DB Connected"));
-   
-}
-
-
-// add your mongoDB connection string above.
-// Do not use '@' symbol in your databse user's password else it will show an error.
+export const connectDB = async () => {
+  try {
+    await mongoose.connect(process.env.MONGO_URI);
+    console.log("✅ DB Connected");
+  } catch (error) {
+    console.error("❌ DB Connection Failed:", error.message);
+    process.exit(1);
+  }
+};
