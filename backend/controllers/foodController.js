@@ -12,15 +12,18 @@ cloudinary.config({
 });
 
 // List all foods
+
 export const listFood = async (req, res) => {
   try {
     const foods = await foodModel.find({});
+    // Make sure each food has a proper image URL
     res.json({ success: true, data: foods });
   } catch (error) {
     console.error("Error fetching food list:", error);
     res.status(500).json({ success: false, message: "Error fetching foods" });
   }
 };
+
 
 // Add food with Cloudinary upload
 export const addFood = async (req, res) => {

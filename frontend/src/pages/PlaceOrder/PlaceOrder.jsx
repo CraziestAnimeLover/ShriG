@@ -57,7 +57,12 @@ const PlaceOrder = () => {
             }
         }
         else{
-            let response = await axios.post(url + "/api/order/placecod", orderData, { headers: { token } });
+            let response = await axios.post(
+  url + "/api/order/placecod",
+  orderData,
+  { headers: { Authorization: `Bearer ${token}` } }
+);
+
             if (response.data.success) {
                 navigate("/myorders")
                 toast.success(response.data.message)
