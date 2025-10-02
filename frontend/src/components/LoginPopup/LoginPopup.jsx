@@ -6,8 +6,9 @@ import axios from 'axios';
 import { toast } from 'react-toastify';
 
 const LoginPopup = ({ setShowLogin }) => {
-  const { setToken, url, loadCartData } = useContext(StoreContext);
+  const { setToken, url,loadCartData } = useContext(StoreContext);
   const [currState, setCurrState] = useState("Sign Up");
+
 
   const [data, setData] = useState({
     name: "",
