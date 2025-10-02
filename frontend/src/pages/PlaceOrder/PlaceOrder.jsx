@@ -35,11 +35,11 @@ const PlaceOrder = () => {
         e.preventDefault()
         let orderItems = [];
         food_list.map(((item) => {
-            if (cartItems[item._id] > 0) {
-                let itemInfo = item;
-                itemInfo["quantity"] = cartItems[item._id];
-                orderItems.push(itemInfo)
-            }
+           if ((cartItems[item._id] ?? 0) > 0) {
+    let itemInfo = { ...item, quantity: cartItems[item._id] };
+    orderItems.push(itemInfo);
+}
+
         }))
         let orderData = {
             address: data,
