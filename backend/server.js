@@ -7,36 +7,39 @@ import cartRouter from "./routes/cartRoute.js";
 import orderRouter from "./routes/orderRoute.js";
 import "dotenv/config";
 
-// App config
 const app = express();
 const port = process.env.PORT || 4000;
 
-// Middlewares
-app.use(express.json());
-
-// ⚡ CORS for your frontend
 const allowedOrigins = [
-  'https://shri-778epsz1b-craziestanimelovers-projects.vercel.app',
+  'http://localhost:5173',
   'https://shri-g-seven.vercel.app',
   'https://shri-g-admin.vercel.app',
 ];
 
-app.use(cors({
-  origin: function(origin, callback) {
-    if (!origin) return callback(null, true); // allow non-browser requests
-    if (allowedOrigins.indexOf(origin) !== -1) {
-      callback(null, true);
-    } else {
-      callback(new Error('Not allowed by CORS'));
-    }
-  },
-  credentials: true
-}));
+// Middlewares
+app.use(express.json());
+
+// ⚡ Global CORS headers for Vercel
+app.use((req, res, next) => {
+  const origin = req.headers.origin;
+  if (allowedOrigins.includes(origin)) {
+    res.setHeader("Access-Control-Allow-Origin", origin);
+  }
+  res.setHeader("Access-Control-Allow-Methods", "GET,POST,PUT,DELETE,OPTIONS");
+  res.setHeader("Access-Control-Allow-Headers", "Content-Type,Authorization,token");
+  res.setHeader("Access-Control-Allow-Credentials", "true");
+
+  // Handle OPTIONS preflight requests
+  if (req.method === "OPTIONS") {
+    return res.sendStatus(200);
+  }
+  next();
+});
 
 // DB connection
 connectDB();
 
-// API endpoints
+// Routes
 app.use("/api/user", userRouter);
 app.use("/api/food", foodRouter);
 app.use("/api/cart", cartRouter);
@@ -50,7 +53,6 @@ app.get("/", (req, res) => {
   res.send("API Working");
 });
 
-// Listen
 app.listen(port, () => console.log(`Server started on port ${port}`));
 
-export default app; // for Vercel serverless
+export default app;

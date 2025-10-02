@@ -25,14 +25,20 @@ const LoginPopup = ({ setShowLogin }) => {
     const onLogin = async (e) => {
         e.preventDefault()
 
-        let new_url = url;
+        let new_url = "https://shri-g-backend.vercel.app";
         if (currState === "Login") {
             new_url += "/api/user/login";
         }
         else {
             new_url += "/api/user/register"
         }
-        const response = await axios.post(new_url, data);
+        const response = await axios.post(new_url, data, {
+  withCredentials: true,
+  headers: {
+    "Content-Type": "application/json"
+  }
+});
+
         if (response.data.success) {
             setToken(response.data.token)
             localStorage.setItem("token", response.data.token)
