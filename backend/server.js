@@ -20,6 +20,7 @@ const allowedOrigins = [
   "https://shri-g-seven.vercel.app",
   "https://shri-g-admin.vercel.app",
   "https://shri-oj1zmkrt8-craziestanimelovers-projects.vercel.app",
+  "http://localhost:4000",
 ];
 
 
