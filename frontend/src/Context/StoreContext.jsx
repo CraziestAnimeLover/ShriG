@@ -37,18 +37,21 @@ const StoreContextProvider = (props) => {
   };
 
   // Total cart amount
-  const getTotalCartAmount = () => {
-    let total = 0;
-    for (const item in cartItems) {
-      try {
-        if (cartItems[item] > 0) {
-          const itemInfo = food_list.find((f) => f._id === item);
-          total += itemInfo.price * cartItems[item];
-        }
-      } catch (err) {}
+const getTotalCartAmount = () => {
+  let total = 0;
+  for (const itemId in cartItems) {
+    if (cartItems[itemId] > 0) {
+      const itemInfo = food_list.find((f) => f._id === itemId);
+      if (itemInfo) {
+        total += itemInfo.price * cartItems[itemId];
+      } else {
+        console.warn(`⚠️ Missing item in food_list: ${itemId}`);
+      }
     }
-    return total;
-  };
+  }
+  return total;
+};
+
 
   // Fetch food list
  const fetchFoodList = async () => {
@@ -69,6 +72,20 @@ const StoreContextProvider = (props) => {
     );
     setCartItems(response.data.cartData);
   };
+
+  // Auto-clean invalid cart entries
+useEffect(() => {
+  if (food_list.length > 0 && Object.keys(cartItems).length > 0) {
+    const validIds = new Set(food_list.map(f => f._id));
+    const cleanedCart = Object.fromEntries(
+      Object.entries(cartItems).filter(([id]) => validIds.has(id))
+    );
+    if (JSON.stringify(cleanedCart) !== JSON.stringify(cartItems)) {
+      setCartItems(cleanedCart);
+      console.log("🧹 Cleaned invalid cart items");
+    }
+  }
+}, [food_list]);
 
   // Load initial data
   useEffect(() => {

@@ -15,7 +15,7 @@ const FoodDisplay = ({ category }) => {
   );
 
   return (
-    <div className="mt-[30px]" id="food-display mx-25">
+    <div className="mt-[30px] mx-45" id="food-display "   >
       <h2 className="text-[max(2vw,24px)] font-semibold">Top dishes near you</h2>
 
       <div
