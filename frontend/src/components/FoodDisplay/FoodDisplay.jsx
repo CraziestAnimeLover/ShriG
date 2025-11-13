@@ -1,5 +1,4 @@
 import React, { useContext } from 'react';
-import './FoodDisplay.css';
 import FoodItem from '../FoodItem/FoodItem';
 import { StoreContext } from '../../Context/StoreContext';
 
@@ -7,17 +6,22 @@ const FoodDisplay = ({ category }) => {
   const { food_list } = useContext(StoreContext);
 
   if (!food_list || food_list.length === 0) {
-    return <p>Loading food items...</p>; // show loading if no data yet
+    return <p className="text-center text-gray-600 mt-10">Loading food items...</p>;
   }
 
-  // Filter items first, then map
-  const filteredItems = food_list.filter(item => category === "All" || category === item.category);
+  // Filter items
+  const filteredItems = food_list.filter(
+    (item) => category === 'All' || category === item.category
+  );
 
   return (
-    <div className='food-display' id='food-display'>
-      <h2>Top dishes near you</h2>
-      <div className='food-display-list'>
-        {filteredItems.map(item => (
+    <div className="mt-[30px]" id="food-display mx-25">
+      <h2 className="text-[max(2vw,24px)] font-semibold">Top dishes near you</h2>
+
+      <div
+        className="grid grid-cols-[repeat(auto-fill,minmax(240px,1fr))] gap-x-[30px] gap-y-[50px] mt-[30px]"
+      >
+        {filteredItems.map((item) => (
           <FoodItem
             key={item._id}
             image={item.image}
