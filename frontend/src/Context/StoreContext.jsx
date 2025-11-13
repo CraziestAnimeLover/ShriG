@@ -51,10 +51,14 @@ const StoreContextProvider = (props) => {
   };
 
   // Fetch food list
-  const fetchFoodList = async () => {
-    const response = await axios.get(`${url}/api/food/list`);
+ const fetchFoodList = async () => {
+  try {
+    const response = await axios.get(`${url}/api/food/list`); // no withCredentials needed
     setFoodList(response.data.data);
-  };
+  } catch (err) {
+    console.error("Failed to fetch food list:", err);
+  }
+};
 
   // Load cart from backend
   const loadCartData = async (tokenHeader) => {

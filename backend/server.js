@@ -1,66 +1,67 @@
 import express from "express";
-import cors from "cors";
+import "dotenv/config";
 import { connectDB } from "./config/db.js";
+import cors from "cors";
+
+// Routes
 import userRouter from "./routes/userRoute.js";
 import foodRouter from "./routes/foodRoute.js";
 import cartRouter from "./routes/cartRoute.js";
 import orderRouter from "./routes/orderRoute.js";
-import "dotenv/config";
 
-// App config
 const app = express();
-const port = process.env.PORT || 4000;
+const PORT = process.env.PORT || 4000;
 
-// Middlewares
-app.use(express.json());
-
-// ⚡ CORS setup for frontend deployments
+// Allowed frontend origins
 const allowedOrigins = [
+  "http://localhost:5173", // ✅ add this
+  "http://localhost:5174", 
   "https://shri-778epsz1b-craziestanimelovers-projects.vercel.app",
   "https://shri-g-seven.vercel.app",
   "https://shri-g-admin.vercel.app",
+  "https://shri-oj1zmkrt8-craziestanimelovers-projects.vercel.app",
 ];
 
-app.use(
-  cors({
-    origin: function (origin, callback) {
-      if (!origin) return callback(null, true); // allow Postman / non-browser requests
-      if (allowedOrigins.indexOf(origin) !== -1) {
-        callback(null, true);
-      } else {
-        callback(new Error("Not allowed by CORS"));
-      }
-    },
-    credentials: true,
-  })
-);
 
-// DB connection
-connectDB()
-  .then(() => {
-    console.log("✅ Database connected");
+// CORS middleware
+app.use(cors({
+  origin: function(origin, callback) {
+    if (!origin) return callback(null, true);
+    if (allowedOrigins.includes(origin)) return callback(null, true);
+    callback(new Error("Not allowed by CORS"));
+  },
+  credentials: true,
+  methods: ["GET","POST","PUT","DELETE","OPTIONS"],
+  allowedHeaders: ["Content-Type", "Authorization","token"]
+}));
+// Handle preflight requests for POST/PUT
+app.options("*", cors());
 
-    // API endpoints
-    app.use("/api/user", userRouter);
-    app.use("/api/food", foodRouter);
-    app.use("/api/cart", cartRouter);
-    app.use("/api/order", orderRouter);
+// Body parsers
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
-    // Serve images
-    app.use("/images", express.static("uploads"));
+// Connect to MongoDB
+connectDB();
 
-    // Root test route
-    app.get("/", (req, res) => {
-      res.send("API Working ✅");
-    });
+// API Routes
+app.use("/api/user", userRouter);
+app.use("/api/food", foodRouter);
+app.use("/api/cart", cartRouter);
+app.use("/api/order", orderRouter);
 
-    // Start server
-    app.listen(port, () =>
-      console.log(`🚀 Server started on http://localhost:${port}`)
-    );
-  })
-  .catch((err) => {
-    console.error("❌ DB connection failed", err);
-  });
+// Serve static images
+app.use("/images", express.static("uploads"));
 
-export default app; // for Vercel
+// Root route
+app.get("/", (req, res) => {
+  res.send("API is running ✅");
+});
+
+// Listen (for local testing)
+if (process.env.NODE_ENV !== "production") {
+  app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+}
+
+// Export for Vercel serverless
+export default app;
