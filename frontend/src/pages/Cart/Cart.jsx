@@ -36,7 +36,7 @@ const Cart = () => {
                   {/* Desktop layout */}
                   <div className="hidden md:grid grid-cols-[1fr_1.5fr_1fr_1fr_1fr_0.5fr] items-center text-black gap-2">
                     <img
-                      src={`${url}/images/${item.image}`}
+                      src={item.image}
                       alt={item.name}
                       className="w-12 h-12 object-cover rounded"
                     />
@@ -64,7 +64,7 @@ const Cart = () => {
                   <div className="md:hidden flex flex-col gap-2 text-sm text-gray-700">
                     <div className="flex items-center gap-3">
                       <img
-                        src={`${url}/images/${item.image}`}
+                        src={item.image}
                         alt={item.name}
                         className="w-16 h-16 object-cover rounded"
                       />
