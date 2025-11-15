@@ -25,7 +25,8 @@ const placeOrder = async (req, res) => {
             price_data: {
                 currency: currency,
                 product_data: {
-                    name: item.name
+                    
+                    images: [item.image] // 👈 ADD THIS
                 },
                 unit_amount: item.price * 100 
             },
