@@ -14,43 +14,30 @@ const PORT = process.env.PORT || 4000;
 
 // Allowed frontend origins
 const allowedOrigins = [
-  "http://localhost:5173", // ✅ add this
-  "http://localhost:5174", 
-  "https://shri-778epsz1b-craziestanimelovers-projects.vercel.app",
-  "https://shri-g-seven.vercel.app",
+  "http://localhost:5173",
+  "http://localhost:5174",
   "https://shri-g-admin.vercel.app",
+  "https://shri-g-seven.vercel.app",
+  "https://shri-778epsz1b-craziestanimelovers-projects.vercel.app",
   "https://shri-oj1zmkrt8-craziestanimelovers-projects.vercel.app",
-  "https://shri-g-admin-cw9k4cijy-craziestanimelovers-projects.vercel.app/",
-  "http://localhost:4000",
+  "https://shri-g-admin-cw9k4cijy-craziestanimelovers-projects.vercel.app",
 ];
 
+app.use(
+  cors({
+    origin: function (origin, callback) {
+      if (!origin || allowedOrigins.includes(origin)) {
+        callback(null, true);
+      } else {
+        callback(new Error("Not allowed by CORS: " + origin));
+      }
+    },
+    credentials: true,
+    methods: ["GET", "POST", "PUT", "DELETE"],
+    allowedHeaders: ["Content-Type", "Authorization", "token"],
+  })
+);
 
-// CORS middleware
-app.use((req, res, next) => {
-  const origin = req.headers.origin;
-  const allowedOrigins = [
-    "http://localhost:5173",
-    "http://localhost:5174",
-    "https://shri-778epsz1b-craziestanimelovers-projects.vercel.app",
-    "https://shri-g-seven.vercel.app",
-    "https://shri-g-admin.vercel.app",
-    "https://shri-oj1zmkrt8-craziestanimelovers-projects.vercel.app",
-  ];
-
-  if (allowedOrigins.includes(origin)) {
-    res.setHeader("Access-Control-Allow-Origin", origin);
-  }
-
-  res.header("Access-Control-Allow-Credentials", "true");
-  res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
-  res.header("Access-Control-Allow-Headers", "Content-Type, Authorization, token");
-
-  if (req.method === "OPTIONS") {
-    return res.sendStatus(200);
-  }
-
-  next();
-});
 
 // Handle preflight requests for POST/PUT
 app.options("*", cors());

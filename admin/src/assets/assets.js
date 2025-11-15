@@ -5,7 +5,11 @@ import profile_image from './profile_image.png'
 import upload_area from './upload_area.png'
 import parcel_icon from './parcel_icon.png'
 
-export const url = 'https://shri-g-api.onrender.com'
+export const url =
+  import.meta.env.MODE === "development"
+    ? "http://localhost:4000"
+    : "https://shri-g-backend.vercel.app";
+
 export const currency = '₹'
 
 export const assets ={
@@ -16,4 +20,3 @@ export const assets ={
     upload_area,
     parcel_icon
 }
-
